@@ -1,0 +1,35 @@
+HTS_Email_Generator_Project/
+│
+├── config/                              # 配置文件
+│   └── settings.py                      # 应用配置
+│
+├── src/                                 # 源代码
+│   ├── core/                            # 核心业务逻辑
+│   │   ├── __init__.py
+│   │   ├── processor.py                 # 主处理流程
+│   │   ├── matcher.py                   # HTS 匹配逻辑
+│   │   ├── email_content.py             # 邮件内容提取与合并
+│   │   └── formatter.py                 # Word 文档格式化
+│   │
+│   ├── data/                            # 数据访问层
+│   │   ├── __init__.py
+│   │   ├── hts_data_loader.py           # 加载 HTS DB
+│   │   └── email_template_loader.py     # 加载 Email Blurb
+│   │
+│   ├── gui/                             # 图形用户界面
+│   │   ├── __init__.py
+│   │   ├── app.py                       # 主 GUI 应用类
+│   │   └── widgets/                     # (可选) 自定义控件
+│   │       └── __init__.py
+│   │
+│   ├── utils/                           # 工具函数
+│   │   ├── __init__.py
+│   │   └── helpers.py                   # 辅助函数 (如 resource_path)
+│   │
+│   └── main.py                          # 应用入口点
+│
+├── build_exe.py                         # PyInstaller 打包脚本
+├── HTS_DB.xlsx                          # HTS 数据库文件
+├── EmailBlurb.xlsx                      # 邮件模板文件
+├── requirements.txt                     # 项目依赖
+└── README.md                            # 项目说明 (可选)
