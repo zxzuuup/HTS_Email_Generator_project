@@ -16,7 +16,13 @@ class HTSProcessor:
         self.email_templates = email_templates
         self.matcher = HTSMatcher()
         self.extractor = EmailContentExtractor()
-        self.formatter = WordFormatter()
+        self.formatter = WordFormatter("HTS_Email.docx")
+
+    def process_multi_code(self, codes, logger_func=print):
+        for code in codes:
+            self.formatter.add_paragraph("编码:{} 模板如下：".format(code), before_black=1, after_black=1)
+            self.process_single_code(code, logger_func)
+        self.formatter.save()
 
     def process_single_code(self, code, logger_func=print):
         """处理单个HTS编码的完整流程"""
@@ -36,27 +42,21 @@ class HTSProcessor:
         en_text_parts, en_style_parts, ch_text_parts, ch_style_parts = self.extractor.extract_and_merge_content(
             matched_columns, self.email_templates)
 
-        generated_files = []
-
         if not en_text_parts and not ch_text_parts:
             logger_func("❌ 未找到对应的邮件内容\n")
-            return generated_files
 
         if en_text_parts:
             try:
-                filename_en = self.formatter.format_and_save_word(en_text_parts, en_style_parts, code, 'EN')
-                logger_func(f"✅ 英文邮件内容已保存至 Word 文件: {filename_en}\n")
-                generated_files.append(filename_en)
+                self.formatter.format_and_save_word(en_text_parts, en_style_parts, code, 'EN')
             except Exception as e:
-                logger_func(f"❌ 生成英文 Word 文件失败: {e}\n")
+                logger_func(f"❌ 生成 Word 文件失败: {e}\n")
+
+        self.formatter.add_paragraph(after_black=1)
 
         if ch_text_parts:
             try:
-                filename_ch = self.formatter.format_and_save_word(ch_text_parts, ch_style_parts, code, 'CH')
-                logger_func(f"✅ 中文邮件内容已保存至 Word 文件: {filename_ch}\n")
-                generated_files.append(filename_ch)
+                self.formatter.format_and_save_word(ch_text_parts, ch_style_parts, code, 'CH')
             except Exception as e:
-                logger_func(f"❌ 生成中文 Word 文件失败: {e}\n")
+                logger_func(f"❌ 生成 Word 文件失败: {e}\n")
 
         logger_func(f"============================= 处理完成: {code} ==================================\n\n")
-        return generated_files

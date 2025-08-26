@@ -137,9 +137,7 @@ class HTSEmailGeneratorApp:
                 self.log_queue.put(msg)
 
             unique_codes = list(set(codes))
-            for code in unique_codes:
-                # 调用核心处理器
-                self.processor.process_single_code(code, gui_logger)
+            self.processor.process_multi_code(unique_codes, gui_logger)
             self.log_queue.put("所有编码处理完成。\n")
         except Exception as e:
             self.log_queue.put(f"❌ 处理过程中发生未预期错误: {e}\n")
